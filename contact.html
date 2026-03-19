@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact | Cle d'Or Conciergerie</title>
+  <meta name="description" content="Contactez Cle d'Or Conciergerie pour un audit gratuit de votre logement et une estimation de revenu Airbnb.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="assets/css/main.css">
+</head>
+<body>
+  <div class="bg-orb orb-1"></div>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a href="index.html" class="brand">
+        <span class="brand-mark">C</span>
+        Cle d'Or Conciergerie
+      </a>
+      <button class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav id="site-nav" class="site-nav">
+        <a href="index.html">Accueil</a>
+        <a href="services.html">Services</a>
+        <a href="a-propos.html">A propos</a>
+        <a href="faq.html">FAQ</a>
+        <a class="active" href="contact.html">Contact</a>
+      </nav>
+      <a class="btn btn-sm hide-mobile" href="contact.html">Audit gratuit</a>
+    </div>
+  </header>
+
+  <main>
+    <section class="section-pad page-hero">
+      <div class="container reveal">
+        <p class="eyebrow">Contact</p>
+        <h1>Parlons de votre logement en 20 minutes.</h1>
+        <p>Remplissez ce formulaire et recevez une estimation de potentiel locatif sous 24h.</p>
+      </div>
+    </section>
+
+    <section class="section-pad alt">
+      <div class="container contact-grid">
+        <article class="contact-card reveal">
+          <h2>Coordonnees directes</h2>
+          <p><strong>Telephone:</strong> +33 6 12 34 56 78</p>
+          <p><strong>Email:</strong> contact@cledor-conciergerie.fr</p>
+          <p><strong>Disponibilite:</strong> Lundi au samedi, 9h a 20h</p>
+          <p><strong>Zones:</strong> Paris, Lyon, Bordeaux, Nice, Marseille</p>
+          <div class="chip-row small">
+            <span>Audit gratuit</span>
+            <span>Reponse 24h</span>
+            <span>Sans engagement</span>
+          </div>
+        </article>
+
+        <article class="form-card reveal delay-1">
+          <form id="contactForm" novalidate>
+            <div class="field-row">
+              <label for="fullName">Nom complet</label>
+              <input id="fullName" name="fullName" type="text" placeholder="Ex: Julie Martin" required>
+            </div>
+            <div class="field-row">
+              <label for="email">Email</label>
+              <input id="email" name="email" type="email" placeholder="vous@email.com" required>
+            </div>
+            <div class="field-row">
+              <label for="phone">Telephone</label>
+              <input id="phone" name="phone" type="tel" placeholder="06 00 00 00 00" required>
+            </div>
+            <div class="field-row">
+              <label for="city">Ville du bien</label>
+              <input id="city" name="city" type="text" placeholder="Ex: Lyon" required>
+            </div>
+            <div class="field-row">
+              <label for="properties">Nombre de logements</label>
+              <select id="properties" name="properties" required>
+                <option value="">Selectionner</option>
+                <option>1 logement</option>
+                <option>2 a 3 logements</option>
+                <option>4 logements et plus</option>
+              </select>
+            </div>
+            <div class="field-row">
+              <label for="message">Votre besoin</label>
+              <textarea id="message" name="message" rows="4" placeholder="Parlez-nous de votre logement et de vos objectifs." required></textarea>
+            </div>
+            <button type="submit" class="btn">Recevoir mon estimation</button>
+            <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="brand">
+          <span class="brand-mark">C</span>
+          Cle d'Or Conciergerie
+        </a>
+        <p>Gestion locative courte duree pour proprietaires exigeants.</p>
+      </div>
+      <div>
+        <h3>Navigation</h3>
+        <a href="services.html">Services</a>
+        <a href="a-propos.html">A propos</a>
+        <a href="faq.html">FAQ</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div>
+        <h3>Legal</h3>
+        <a href="mentions-legales.html">Mentions legales</a>
+        <a href="politique-confidentialite.html">Politique de confidentialite</a>
+      </div>
+      <div>
+        <h3>Coordonnees</h3>
+        <p>+33 6 12 34 56 78</p>
+        <p>contact@cledor-conciergerie.fr</p>
+        <p>Paris, Lyon, Bordeaux, Nice</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; <span id="year"></span> Cle d'Or Conciergerie. Tous droits reserves.</p>
+    </div>
+  </footer>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
