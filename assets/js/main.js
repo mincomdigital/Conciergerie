@@ -338,8 +338,44 @@ if (contactForm) {
       return { configured: false, delivered: false };
     }
 
+    if (provider === "formsubmit") {
+      const recipient = String(emailConfig.recipient || "").trim();
+      const endpoint = String(emailConfig.endpoint || "").trim()
+        || (recipient ? `https://formsubmit.co/ajax/${encodeURIComponent(recipient)}` : "");
+      if (!endpoint) {
+        throw new Error("Configuration FormSubmit incomplete.");
+      }
+
+      const formPayload = {
+        _subject: emailConfig.subject || "Nouvelle demande depuis Cle d'Or Conciergerie",
+        _captcha: "false",
+        name: payload.fullName,
+        email: payload.email,
+        phone: payload.phone,
+        city: payload.city,
+        properties: payload.properties,
+        message: payload.message
+      };
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(formPayload)
+      });
+
+      const json = await response.json().catch(() => null);
+      if (!response.ok || (json && json.success === false)) {
+        throw new Error("Echec d'envoi vers FormSubmit.");
+      }
+
+      return { configured: true, delivered: true };
+    }
+
     if (provider === "formspree") {
-      const endpoint = String(emailConfig.endpoint || "").trim();
+      const endpoint = String(emailConfig.formspreeEndpoint || emailConfig.endpoint || "").trim();
       if (!endpoint) {
         throw new Error("Configuration Formspree incomplete.");
       }

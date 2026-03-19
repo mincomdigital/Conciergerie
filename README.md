@@ -33,7 +33,8 @@ Sans configuration (`provider: none`), le site reste en mode demo et n'envoie ri
 1. Ouvrir `assets/js/email-config.js`.
 2. Choisir `provider`:
    - `none`: pas d'envoi externe (mode demo)
-   - `formspree`: renseigner `endpoint`
+   - `formsubmit`: renseigner `recipient` (et valider l'email d'activation recu au 1er envoi)
+   - `formspree`: renseigner `formspreeEndpoint`
    - `web3forms`: renseigner `accessKey`
 3. Sauvegarder puis tester `contact.html`.
 
