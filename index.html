@@ -47,6 +47,7 @@
           <div class="hero-actions">
             <a class="btn" href="contact.html">Demander une estimation</a>
             <a class="btn btn-ghost" href="services.html">Voir nos prestations</a>
+            <a class="btn btn-ghost" href="#parcours">Lancer le parcours express</a>
           </div>
           <ul class="trust-points">
             <li>+38% de revenus moyens la 1ere annee</li>
@@ -55,6 +56,13 @@
           </ul>
         </div>
         <div class="hero-card reveal delay-1">
+          <div class="hero-media">
+            <img
+              src="https://images.unsplash.com/photo-1493666438817-866a91353ca9?auto=format&fit=crop&w=1200&q=80"
+              alt="Salon moderne et lumineux prepare pour une location haut de gamme"
+              loading="lazy"
+            >
+          </div>
           <h2>Performance moyenne de nos biens</h2>
           <div class="stats-grid">
             <article>
@@ -88,6 +96,153 @@
           <span>Direct Booking</span>
           <span>Guesty</span>
           <span>Stripe</span>
+        </div>
+      </div>
+    </section>
+
+    <section id="parcours" class="section-pad alt">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Parcours visiteur</p>
+          <h2>Un mini jeu de 45 secondes pour obtenir votre plan ideal</h2>
+          <p>Repondez a 4 questions et recevez une recommandation instantanee selon votre profil proprietaire.</p>
+        </div>
+        <div class="journey-shell">
+          <article id="journeyPlanner" class="journey-panel reveal" aria-live="polite">
+            <div class="journey-track">
+              <div id="journeyProgressBar" class="journey-track-bar"></div>
+            </div>
+
+            <div class="journey-step is-active" data-field="city">
+              <p class="journey-label">Mission 1/4</p>
+              <h3>Ou se situe votre logement ?</h3>
+              <div class="option-grid">
+                <button type="button" class="journey-option" data-value="Rouen centre">Rouen centre</button>
+                <button type="button" class="journey-option" data-value="Rive gauche">Rive gauche</button>
+                <button type="button" class="journey-option" data-value="Metropole rouennaise">Metropole rouennaise</button>
+                <button type="button" class="journey-option" data-value="Agglomeration proche">Agglomeration proche</button>
+              </div>
+            </div>
+
+            <div class="journey-step" data-field="property">
+              <p class="journey-label">Mission 2/4</p>
+              <h3>Quel type de bien souhaitez-vous optimiser ?</h3>
+              <div class="option-grid">
+                <button type="button" class="journey-option" data-value="Studio">Studio</button>
+                <button type="button" class="journey-option" data-value="T2-T3">T2 / T3</button>
+                <button type="button" class="journey-option" data-value="Maison familiale">Maison familiale</button>
+                <button type="button" class="journey-option" data-value="Portfolio">Plusieurs biens</button>
+              </div>
+            </div>
+
+            <div class="journey-step" data-field="goal">
+              <p class="journey-label">Mission 3/4</p>
+              <h3>Votre objectif principal aujourd'hui ?</h3>
+              <div class="option-grid">
+                <button type="button" class="journey-option" data-value="Maximiser les revenus">Maximiser les revenus</button>
+                <button type="button" class="journey-option" data-value="Gagner du temps">Gagner du temps</button>
+                <button type="button" class="journey-option" data-value="Ameliorer les avis">Ameliorer les avis</button>
+                <button type="button" class="journey-option" data-value="Deleguer completement">Deleguer completement</button>
+              </div>
+            </div>
+
+            <div class="journey-step" data-field="start">
+              <p class="journey-label">Mission 4/4</p>
+              <h3>Quand voulez-vous demarrer ?</h3>
+              <div class="option-grid">
+                <button type="button" class="journey-option" data-value="Cette semaine">Cette semaine</button>
+                <button type="button" class="journey-option" data-value="Ce mois-ci">Ce mois-ci</button>
+                <button type="button" class="journey-option" data-value="Sous 3 mois">Sous 3 mois</button>
+                <button type="button" class="journey-option" data-value="Je compare encore">Je compare encore</button>
+              </div>
+            </div>
+
+            <div class="journey-actions">
+              <button id="journeyPrev" type="button" class="btn btn-ghost">Precedent</button>
+              <button id="journeyNext" type="button" class="btn">Suivant</button>
+            </div>
+          </article>
+
+          <aside class="journey-summary reveal delay-1">
+            <p class="eyebrow">Votre plan perso</p>
+            <h3 id="journeyTitle">Debloquez votre recommandation</h3>
+            <p id="journeyText">Completez les missions pour recevoir un plan sur mesure et une proposition adaptee a votre bien.</p>
+            <div id="journeyBadges" class="journey-badges">
+              <span>Mission en cours</span>
+            </div>
+            <a id="journeyCta" class="btn" href="contact.html">Recevoir mon plan detaille</a>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad">
+      <div class="container simulator-shell reveal">
+        <div>
+          <p class="eyebrow">Simulateur fun</p>
+          <h2>Estimez votre potentiel en 10 secondes</h2>
+          <p>Faites glisser les curseurs et voyez tout de suite l'impact d'une gestion optimisee.</p>
+        </div>
+        <div class="simulator-card">
+          <div class="sim-row">
+            <label for="simNights">Nuits louees par mois</label>
+            <input id="simNights" type="range" min="8" max="30" value="18">
+            <p><span id="simNightsValue">18</span> nuits</p>
+          </div>
+          <div class="sim-row">
+            <label for="simPrice">Prix moyen par nuit</label>
+            <input id="simPrice" type="range" min="55" max="220" value="95">
+            <p><span id="simPriceValue">95</span> EUR / nuit</p>
+          </div>
+          <div class="sim-results">
+            <article>
+              <p class="sim-label">Revenu actuel estime</p>
+              <p id="simCurrent" class="sim-value">1710 EUR</p>
+            </article>
+            <article>
+              <p class="sim-label">Potentiel optimise</p>
+              <p id="simOptimized" class="sim-value">2172 EUR</p>
+            </article>
+            <article>
+              <p class="sim-label">Gain mensuel probable</p>
+              <p id="simGain" class="sim-value">+462 EUR</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-pad">
+      <div class="container">
+        <div class="section-head reveal">
+          <p class="eyebrow">Ambiance moderne</p>
+          <h2>Des logements premium qui attirent tout de suite les bons voyageurs</h2>
+        </div>
+        <div class="showcase-grid">
+          <figure class="showcase-card reveal">
+            <img
+              src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=900&q=80"
+              alt="Appartement design avec cuisine ouverte et finitions haut de gamme"
+              loading="lazy"
+            >
+            <figcaption>Design interieur qui augmente la valeur percue</figcaption>
+          </figure>
+          <figure class="showcase-card reveal delay-1">
+            <img
+              src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=900&q=80"
+              alt="Chambre elegante et chaleureuse optimisee pour les sejours courts"
+              loading="lazy"
+            >
+            <figcaption>Ambiance cosy pour booster les commentaires 5 etoiles</figcaption>
+          </figure>
+          <figure class="showcase-card reveal delay-2">
+            <img
+              src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=900&q=80"
+              alt="Salon contemporain avec mobilier premium dans une location urbaine"
+              loading="lazy"
+            >
+            <figcaption>Mise en scene premium pour augmenter le taux de conversion</figcaption>
+          </figure>
         </div>
       </div>
     </section>
@@ -201,17 +356,17 @@
           <article class="testimonial reveal">
             <p>"En 3 mois, mon appartement a passe 82% d'occupation. Service irreprochable et communication fluide."</p>
             <h3>Camille R.</h3>
-            <span>Lyon, T2 centre-ville</span>
+            <span>Rouen, T2 quartier Gare</span>
           </article>
           <article class="testimonial reveal delay-1">
             <p>"Je vivais a l'etranger, ils ont tout gere. Revenus en hausse et zero stress operationnel."</p>
             <h3>Yannis M.</h3>
-            <span>Bordeaux, maison 3 chambres</span>
+            <span>Bois-Guillaume, maison 3 chambres</span>
           </article>
           <article class="testimonial reveal delay-2">
             <p>"Niveau hotelier sur la proprete, voyageurs ravis, superhost retrouve en une saison."</p>
             <h3>Sophie L.</h3>
-            <span>Nice, studio balcon mer</span>
+            <span>Rouen, studio quartier Vieux-Marche</span>
           </article>
         </div>
       </div>
@@ -253,7 +408,7 @@
         <h3>Coordonnees</h3>
         <p>+33 6 12 34 56 78</p>
         <p>contact@cledor-conciergerie.fr</p>
-        <p>Paris, Lyon, Bordeaux, Nice</p>
+        <p>Rouen et metropole rouennaise</p>
       </div>
     </div>
     <div class="footer-bottom">

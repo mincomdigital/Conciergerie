@@ -287,6 +287,20 @@ ul {
   font-size: 1.28rem;
 }
 
+.hero-media {
+  border-radius: calc(var(--radius-lg) - 4px);
+  overflow: hidden;
+  margin-bottom: 1rem;
+  aspect-ratio: 16 / 9;
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -344,6 +358,218 @@ ul {
 
 .card-grid.two {
   grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.journey-shell {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.journey-panel,
+.journey-summary,
+.simulator-card {
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 1.2rem;
+  box-shadow: var(--shadow);
+}
+
+.journey-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: #f1e3d4;
+  overflow: hidden;
+  margin-bottom: 1rem;
+}
+
+.journey-track-bar {
+  width: 25%;
+  height: 100%;
+  background: linear-gradient(145deg, var(--accent), var(--accent-deep));
+  transition: width 0.26s ease;
+}
+
+.journey-step {
+  display: none;
+}
+
+.journey-step.is-active {
+  display: block;
+}
+
+.journey-label {
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.78rem;
+  color: var(--teal);
+  font-weight: 700;
+  margin-bottom: 0.4rem;
+}
+
+.option-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin-top: 1rem;
+}
+
+.journey-option {
+  border: 1px solid rgba(18, 35, 58, 0.16);
+  background: #fff;
+  color: var(--text);
+  border-radius: 12px;
+  padding: 0.74rem 0.8rem;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+  transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, background 0.16s ease;
+}
+
+.journey-option:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+
+.journey-option.selected {
+  background: #fff3eb;
+  border-color: var(--accent);
+  box-shadow: 0 10px 20px rgba(214, 104, 58, 0.16);
+}
+
+.journey-actions {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 1.1rem;
+}
+
+.journey-actions .btn {
+  min-width: 120px;
+}
+
+.journey-actions .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.journey-summary {
+  background: linear-gradient(150deg, #1f354c, #2a7a74);
+  color: #fff;
+  min-height: 100%;
+}
+
+.journey-summary h3 {
+  color: #fff;
+}
+
+.journey-summary p {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.journey-badges {
+  display: flex;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin: 0.9rem 0 1.2rem;
+}
+
+.journey-badges span {
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.12);
+  padding: 0.35rem 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.simulator-shell {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  align-items: start;
+}
+
+.sim-row {
+  margin-bottom: 0.9rem;
+}
+
+.sim-row label {
+  display: block;
+  margin-bottom: 0.35rem;
+}
+
+.sim-row input[type="range"] {
+  width: 100%;
+  accent-color: var(--accent);
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+
+.sim-row p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-weight: 600;
+}
+
+.sim-results {
+  margin-top: 1rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.sim-results article {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  padding: 0.7rem 0.8rem;
+  background: #fffaf3;
+}
+
+.sim-label {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.sim-value {
+  margin: 0.2rem 0 0;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent-deep);
+}
+
+.showcase-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.showcase-card {
+  margin: 0;
+  background: #fff;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+}
+
+.showcase-card img {
+  width: 100%;
+  height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
+.showcase-card figcaption {
+  padding: 0.8rem 1rem 1rem;
+  color: var(--muted);
+  font-weight: 600;
 }
 
 .timeline {
@@ -404,7 +630,7 @@ ul {
 }
 
 .price-card li::before {
-  content: "a";
+  content: "-";
   position: absolute;
   left: 0;
   color: var(--accent);
@@ -458,6 +684,29 @@ ul {
   max-width: 70ch;
 }
 
+.page-hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1rem;
+  align-items: center;
+}
+
+.page-hero-photo {
+  margin: 0;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+}
+
+.page-hero-photo img {
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+  display: block;
+}
+
 .split-grid,
 .contact-grid {
   display: grid;
@@ -469,6 +718,16 @@ ul {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1rem;
+}
+
+.team-photo {
+  width: 74px;
+  height: 74px;
+  border-radius: 999px;
+  object-fit: cover;
+  display: block;
+  margin-bottom: 0.85rem;
+  border: 2px solid rgba(214, 104, 58, 0.3);
 }
 
 .service-panel ul,
@@ -540,7 +799,7 @@ ul {
 }
 
 .faq-item.open .faq-question::after {
-  content: "a";
+  content: "-";
 }
 
 .faq-answer {
@@ -596,6 +855,10 @@ textarea:focus {
 
 .form-status.success {
   color: var(--teal);
+}
+
+.form-status.info {
+  color: var(--text);
 }
 
 .form-status.error {
@@ -696,8 +959,12 @@ textarea:focus {
   .testimonial-grid,
   .footer-grid,
   .team-grid,
+  .journey-shell,
+  .simulator-shell,
   .card-grid.three,
-  .metrics-grid {
+  .metrics-grid,
+  .showcase-grid,
+  .page-hero-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
@@ -737,6 +1004,10 @@ textarea:focus {
   .testimonial-grid,
   .split-grid,
   .contact-grid,
+  .journey-shell,
+  .simulator-shell,
+  .showcase-grid,
+  .page-hero-grid,
   .team-grid,
   .metrics-grid,
   .footer-grid {
@@ -750,5 +1021,13 @@ textarea:focus {
 
   .price-card.featured {
     transform: none;
+  }
+
+  .option-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .journey-actions {
+    flex-direction: column;
   }
 }
