@@ -107,30 +107,68 @@
     <section id="parcours" class="section-pad alt">
       <div class="container">
         <div class="section-head reveal">
-          <p class="eyebrow">Parcours visiteur</p>
-          <h2>Un mini jeu de 45 secondes pour obtenir votre plan ideal</h2>
-          <p>Repondez a 4 questions et recevez une recommandation instantanee selon votre profil proprietaire.</p>
+          <p class="eyebrow">Parcours decouverte</p>
+          <h2>Explorez votre potentiel locatif comme un office du tourisme</h2>
+          <p>4 escales interactives, un passeport proprietaire et un itineraire concret a la fin du parcours.</p>
         </div>
+
+        <div class="journey-intro reveal">
+          <article class="journey-intro-card">
+            <p class="journey-intro-kicker">Escale 1</p>
+            <h3>Point de depart</h3>
+            <p>On localise votre bien et le profil de demande autour de votre zone.</p>
+          </article>
+          <article class="journey-intro-card">
+            <p class="journey-intro-kicker">Escale 2</p>
+            <h3>Type de visite</h3>
+            <p>Vous choisissez un parcours adapte a votre bien et a votre niveau d'implication.</p>
+          </article>
+          <article class="journey-intro-card">
+            <p class="journey-intro-kicker">Escale 3</p>
+            <h3>Objectif final</h3>
+            <p>Le moteur propose une feuille de route sur mesure pour votre prochaine saison.</p>
+          </article>
+        </div>
+
         <div class="journey-shell">
           <article id="journeyPlanner" class="journey-panel reveal" aria-live="polite">
+            <div class="journey-map" aria-label="Carte des escales">
+              <button type="button" class="journey-map-point is-active" data-step-target="0">
+                <span>1</span>
+                <small>Depart</small>
+              </button>
+              <button type="button" class="journey-map-point" data-step-target="1">
+                <span>2</span>
+                <small>Bien</small>
+              </button>
+              <button type="button" class="journey-map-point" data-step-target="2">
+                <span>3</span>
+                <small>Objectif</small>
+              </button>
+              <button type="button" class="journey-map-point" data-step-target="3">
+                <span>4</span>
+                <small>Lancement</small>
+              </button>
+            </div>
+
             <div class="journey-track">
               <div id="journeyProgressBar" class="journey-track-bar"></div>
             </div>
 
             <div class="journey-step is-active" data-field="city">
-              <p class="journey-label">Mission 1/4</p>
-              <h3>Ou se situe votre logement ?</h3>
+              <p class="journey-label">Escale 1/4</p>
+              <h3>Quel est votre point de depart ?</h3>
               <div class="option-grid">
-                <button type="button" class="journey-option" data-value="Rouen centre">Rouen centre</button>
-                <button type="button" class="journey-option" data-value="Rive gauche">Rive gauche</button>
+                <button type="button" class="journey-option" data-value="Rouen centre">Rouen centre historique</button>
+                <button type="button" class="journey-option" data-value="Rive gauche">Rive gauche en developpement</button>
                 <button type="button" class="journey-option" data-value="Metropole rouennaise">Metropole rouennaise</button>
                 <button type="button" class="journey-option" data-value="Agglomeration proche">Agglomeration proche</button>
               </div>
             </div>
 
             <div class="journey-step" data-field="property">
-              <p class="journey-label">Mission 2/4</p>
-              <h3>Quel type de bien souhaitez-vous optimiser ?</h3>
+              <p class="journey-label">Escale 2/4</p>
+              <h3>Quel type de bien voulez-vous mettre en avant ?</h3>
               <div class="option-grid">
                 <button type="button" class="journey-option" data-value="Studio">Studio</button>
                 <button type="button" class="journey-option" data-value="T2-T3">T2 / T3</button>
@@ -140,19 +178,19 @@
             </div>
 
             <div class="journey-step" data-field="goal">
-              <p class="journey-label">Mission 3/4</p>
-              <h3>Votre objectif principal aujourd'hui ?</h3>
+              <p class="journey-label">Escale 3/4</p>
+              <h3>Quelle experience souhaitez-vous creer ?</h3>
               <div class="option-grid">
-                <button type="button" class="journey-option" data-value="Maximiser les revenus">Maximiser les revenus</button>
-                <button type="button" class="journey-option" data-value="Gagner du temps">Gagner du temps</button>
-                <button type="button" class="journey-option" data-value="Ameliorer les avis">Ameliorer les avis</button>
-                <button type="button" class="journey-option" data-value="Deleguer completement">Deleguer completement</button>
+                <button type="button" class="journey-option" data-value="Maximiser les revenus">Plus de revenus</button>
+                <button type="button" class="journey-option" data-value="Gagner du temps">Moins de charge mentale</button>
+                <button type="button" class="journey-option" data-value="Ameliorer les avis">Une note voyageurs plus forte</button>
+                <button type="button" class="journey-option" data-value="Deleguer completement">Delegation complete</button>
               </div>
             </div>
 
             <div class="journey-step" data-field="start">
-              <p class="journey-label">Mission 4/4</p>
-              <h3>Quand voulez-vous demarrer ?</h3>
+              <p class="journey-label">Escale 4/4</p>
+              <h3>Quand voulez-vous lancer votre itineraire ?</h3>
               <div class="option-grid">
                 <button type="button" class="journey-option" data-value="Cette semaine">Cette semaine</button>
                 <button type="button" class="journey-option" data-value="Ce mois-ci">Ce mois-ci</button>
@@ -163,18 +201,28 @@
 
             <div class="journey-actions">
               <button id="journeyPrev" type="button" class="btn btn-ghost">Precedent</button>
-              <button id="journeyNext" type="button" class="btn">Suivant</button>
+              <button id="journeyNext" type="button" class="btn">Continuer la visite</button>
             </div>
           </article>
 
           <aside class="journey-summary reveal delay-1">
-            <p class="eyebrow">Votre plan perso</p>
-            <h3 id="journeyTitle">Debloquez votre recommandation</h3>
-            <p id="journeyText">Completez les missions pour recevoir un plan sur mesure et une proposition adaptee a votre bien.</p>
+            <p class="eyebrow">Passeport proprietaire</p>
+            <h3 id="journeyTitle">Debloquez votre itineraire</h3>
+            <p id="journeyText">Terminez les escales pour recevoir un carnet de route adapte a votre bien et votre zone.</p>
             <div id="journeyBadges" class="journey-badges">
-              <span>Mission en cours</span>
+              <span>Visite en cours</span>
             </div>
-            <a id="journeyCta" class="btn" href="contact.html">Recevoir mon plan detaille</a>
+            <div class="journey-meta">
+              <article>
+                <span>Temps moyen</span>
+                <strong id="journeyEta">45 sec</strong>
+              </article>
+              <article>
+                <span>Style de parcours</span>
+                <strong id="journeyMood">Explorer</strong>
+              </article>
+            </div>
+            <a id="journeyCta" class="btn" href="contact.html">Recevoir mon carnet de route</a>
           </aside>
         </div>
       </div>

@@ -110,6 +110,7 @@ if (parallaxLayers.length && !(reduceMotionQuery && reduceMotionQuery.matches)) 
 const journeyPlanner = document.querySelector("#journeyPlanner");
 if (journeyPlanner) {
   const stepEls = Array.from(journeyPlanner.querySelectorAll(".journey-step"));
+  const mapPoints = Array.from(journeyPlanner.querySelectorAll(".journey-map-point"));
   const prevBtn = document.querySelector("#journeyPrev");
   const nextBtn = document.querySelector("#journeyNext");
   const progressBar = document.querySelector("#journeyProgressBar");
@@ -117,8 +118,11 @@ if (journeyPlanner) {
   const summaryText = document.querySelector("#journeyText");
   const badgesWrap = document.querySelector("#journeyBadges");
   const ctaLink = document.querySelector("#journeyCta");
+  const etaEl = document.querySelector("#journeyEta");
+  const moodEl = document.querySelector("#journeyMood");
 
   let stepIndex = 0;
+  let autoNextTimer = 0;
   const journeyState = {
     city: "",
     property: "",
@@ -133,6 +137,20 @@ if (journeyPlanner) {
     start: "Demarrage"
   };
 
+  const styleByGoal = {
+    "Maximiser les revenus": "Boost",
+    "Gagner du temps": "Zen",
+    "Ameliorer les avis": "5 etoiles",
+    "Deleguer completement": "Premium"
+  };
+
+  const etaByStart = {
+    "Cette semaine": "7 jours",
+    "Ce mois-ci": "30 jours",
+    "Sous 3 mois": "90 jours",
+    "Je compare encore": "A votre rythme"
+  };
+
   const getPack = () => {
     if (journeyState.property === "Portfolio" || journeyState.goal === "Deleguer completement") {
       return "Collection";
@@ -143,11 +161,31 @@ if (journeyPlanner) {
     return "Essentiel";
   };
 
+  const getCompletedCount = () => stepEls.reduce((count, step) => {
+    const field = step.dataset.field;
+    if (!field) return count;
+    return count + (journeyState[field] ? 1 : 0);
+  }, 0);
+
+  const getJourneyMood = () => {
+    if (journeyState.goal && styleByGoal[journeyState.goal]) {
+      return styleByGoal[journeyState.goal];
+    }
+    return "Explorer";
+  };
+
+  const getJourneyEta = () => {
+    if (journeyState.start && etaByStart[journeyState.start]) {
+      return etaByStart[journeyState.start];
+    }
+    return "45 sec";
+  };
+
   const renderBadges = () => {
     const activeItems = Object.entries(journeyState).filter((item) => item[1]);
     if (!badgesWrap) return;
     if (!activeItems.length) {
-      badgesWrap.innerHTML = "<span>Mission en cours</span>";
+      badgesWrap.innerHTML = "<span>Visite en cours</span>";
       return;
     }
     badgesWrap.innerHTML = activeItems
@@ -157,25 +195,48 @@ if (journeyPlanner) {
 
   const updateSummary = (isDone) => {
     const pack = getPack();
+    const completed = getCompletedCount();
     if (!summaryTitle || !summaryText) return;
+
+    if (etaEl) etaEl.textContent = getJourneyEta();
+    if (moodEl) moodEl.textContent = getJourneyMood();
+
     if (!isDone) {
-      summaryTitle.textContent = "Debloquez votre recommandation";
-      summaryText.textContent = "Completez les missions pour recevoir un plan sur mesure et une proposition adaptee a votre bien.";
+      if (!completed) {
+        summaryTitle.textContent = "Debloquez votre itineraire";
+        summaryText.textContent = "Repondez aux escales pour activer un plan clair, rapide et adapte a votre bien.";
+      } else {
+        const suffix = completed > 1 ? "s" : "";
+        summaryTitle.textContent = `Carnet en cours: ${pack}`;
+        summaryText.textContent = `Vous avez valide ${completed} escale${suffix}. Encore quelques clics pour recevoir une feuille de route complete.`;
+      }
       renderBadges();
       return;
     }
-    summaryTitle.textContent = `Plan recommande: ${pack}`;
-    summaryText.textContent = `Pour un bien ${journeyState.property || "locatif"} en ${journeyState.city || "metropole rouennaise"}, axe "${journeyState.goal || "performance"}", nous suggerons un lancement ${journeyState.start || "prochainement"} avec un potentiel de progression de 20% a 35%.`;
+    summaryTitle.textContent = `Itineraire recommande: ${pack}`;
+    summaryText.textContent = `Cap sur ${journeyState.city || "la metropole rouennaise"}, format ${journeyState.property || "locatif"}, avec une strategie ${journeyState.goal || "orientee performance"} et un lancement ${journeyState.start || "prochainement"}.`;
     renderBadges();
   };
 
   const updateProgress = () => {
     if (!progressBar) return;
-    const currentStep = stepEls[stepIndex];
-    const field = currentStep ? currentStep.dataset.field : "";
-    const isAnswered = field ? Boolean(journeyState[field]) : false;
-    const progress = ((stepIndex + (isAnswered ? 1 : 0)) / stepEls.length) * 100;
+    const progress = (getCompletedCount() / stepEls.length) * 100;
     progressBar.style.width = `${Math.max(progress, 0)}%`;
+  };
+
+  const updateMap = () => {
+    if (!mapPoints.length) return;
+
+    const completed = getCompletedCount();
+    const maxReachable = Math.min(completed, stepEls.length - 1);
+
+    mapPoints.forEach((point, index) => {
+      point.classList.toggle("is-active", index === stepIndex);
+      point.classList.toggle("is-done", index < completed);
+      point.disabled = index > maxReachable;
+      point.setAttribute("aria-current", index === stepIndex ? "step" : "false");
+      point.setAttribute("aria-label", `Aller a l'escale ${index + 1}`);
+    });
   };
 
   const renderStep = () => {
@@ -195,10 +256,11 @@ if (journeyPlanner) {
     if (prevBtn) prevBtn.disabled = stepIndex === 0;
     if (nextBtn) {
       nextBtn.disabled = !hasSelection;
-      nextBtn.textContent = stepIndex === stepEls.length - 1 ? "Terminer" : "Suivant";
+      nextBtn.textContent = stepIndex === stepEls.length - 1 ? "Terminer la visite" : "Continuer la visite";
     }
 
     updateProgress();
+    updateMap();
     updateSummary(false);
   };
 
@@ -206,9 +268,15 @@ if (journeyPlanner) {
     const payload = {
       ...journeyState,
       recommendedPack: getPack(),
+      journeyMood: getJourneyMood(),
+      launchEta: getJourneyEta(),
       savedAt: new Date().toISOString()
     };
-    localStorage.setItem("conciergerieJourney", JSON.stringify(payload));
+    try {
+      localStorage.setItem("conciergerieJourney", JSON.stringify(payload));
+    } catch (_error) {
+      // Ignore local storage errors.
+    }
   };
 
   const finishJourney = () => {
@@ -219,14 +287,24 @@ if (journeyPlanner) {
       nextBtn.disabled = true;
       nextBtn.textContent = "Termine";
     }
+
     if (ctaLink) {
       const params = new URLSearchParams({
         from: "parcours",
         city: journeyState.city,
-        property: journeyState.property
+        property: journeyState.property,
+        pack: getPack()
       });
       ctaLink.href = `contact.html?${params.toString()}`;
     }
+
+    updateMap();
+  };
+
+  const goToNextStep = () => {
+    if (stepIndex >= stepEls.length - 1) return;
+    stepIndex += 1;
+    renderStep();
   };
 
   journeyPlanner.querySelectorAll(".journey-option").forEach((option) => {
@@ -239,13 +317,33 @@ if (journeyPlanner) {
       step.querySelectorAll(".journey-option").forEach((btn) => btn.classList.remove("selected"));
       option.classList.add("selected");
       if (nextBtn) nextBtn.disabled = false;
+
+      // UX mobile-first: on fluidifie le parcours avec un passage automatique.
+      window.clearTimeout(autoNextTimer);
+      if (stepIndex < stepEls.length - 1) {
+        autoNextTimer = window.setTimeout(goToNextStep, 230);
+      }
+
       updateProgress();
-      renderBadges();
+      updateMap();
+      updateSummary(false);
+    });
+  });
+
+  mapPoints.forEach((point) => {
+    point.addEventListener("click", () => {
+      const target = Number(point.dataset.stepTarget || "-1");
+      if (target < 0) return;
+      const maxReachable = Math.min(getCompletedCount(), stepEls.length - 1);
+      if (target > maxReachable) return;
+      stepIndex = target;
+      renderStep();
     });
   });
 
   if (prevBtn) {
     prevBtn.addEventListener("click", () => {
+      window.clearTimeout(autoNextTimer);
       if (stepIndex > 0) {
         stepIndex -= 1;
         renderStep();
@@ -255,11 +353,11 @@ if (journeyPlanner) {
 
   if (nextBtn) {
     nextBtn.addEventListener("click", () => {
+      window.clearTimeout(autoNextTimer);
       const field = stepEls[stepIndex].dataset.field;
       if (!journeyState[field]) return;
       if (stepIndex < stepEls.length - 1) {
-        stepIndex += 1;
-        renderStep();
+        goToNextStep();
         return;
       }
       finishJourney();
