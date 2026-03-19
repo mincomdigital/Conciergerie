@@ -8,7 +8,7 @@ window.CLE_DOR_EMAIL_CONFIG = {
   // FormSubmit (no backend):
   // On first submit, FormSubmit sends an activation email to this address.
   // Confirm it once to start receiving leads.
-  recipient: "contact@cledor-conciergerie.fr",
+  recipient: "mincomdigital@gmail.com",
   // Optional custom endpoint, otherwise generated from recipient.
   endpoint: "",
 
