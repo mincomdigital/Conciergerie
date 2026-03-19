@@ -32,6 +32,81 @@ if (yearEl) {
   yearEl.textContent = String(new Date().getFullYear());
 }
 
+const themeToggleButtons = document.querySelectorAll("[data-theme-toggle]");
+if (themeToggleButtons.length) {
+  const themeStorageKey = "cledor-theme";
+  const getStoredTheme = () => {
+    try {
+      return localStorage.getItem(themeStorageKey);
+    } catch (_error) {
+      return null;
+    }
+  };
+
+  const detectTheme = () => {
+    const stored = getStoredTheme();
+    if (stored === "dark" || stored === "light") return stored;
+    const supportsMatchMedia = typeof window.matchMedia === "function";
+    return supportsMatchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  };
+
+  const applyTheme = (theme) => {
+    document.body.dataset.theme = theme;
+    const isDark = theme === "dark";
+    themeToggleButtons.forEach((button) => {
+      const label = button.querySelector("[data-theme-toggle-label]");
+      if (label) label.textContent = isDark ? "Mode clair" : "Mode sombre";
+      button.setAttribute("aria-label", isDark ? "Activer le mode clair" : "Activer le mode sombre");
+    });
+  };
+
+  const saveTheme = (theme) => {
+    try {
+      localStorage.setItem(themeStorageKey, theme);
+    } catch (_error) {
+      // Ignore local storage errors.
+    }
+  };
+
+  applyTheme(detectTheme());
+
+  themeToggleButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const nextTheme = document.body.dataset.theme === "dark" ? "light" : "dark";
+      applyTheme(nextTheme);
+      saveTheme(nextTheme);
+    });
+  });
+}
+
+const parallaxLayers = document.querySelectorAll(".parallax-layer");
+const reduceMotionQuery = typeof window.matchMedia === "function"
+  ? window.matchMedia("(prefers-reduced-motion: reduce)")
+  : null;
+
+if (parallaxLayers.length && !(reduceMotionQuery && reduceMotionQuery.matches)) {
+  let ticking = false;
+
+  const updateParallax = () => {
+    const scrollY = window.scrollY || window.pageYOffset;
+    parallaxLayers.forEach((layer) => {
+      const speed = Number(layer.dataset.parallaxSpeed || "0.08");
+      const shift = scrollY * speed;
+      layer.style.transform = `translate3d(0, ${shift}px, 0)`;
+    });
+    ticking = false;
+  };
+
+  const requestUpdate = () => {
+    if (ticking) return;
+    window.requestAnimationFrame(updateParallax);
+    ticking = true;
+  };
+
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  updateParallax();
+}
+
 const journeyPlanner = document.querySelector("#journeyPlanner");
 if (journeyPlanner) {
   const stepEls = Array.from(journeyPlanner.querySelectorAll(".journey-step"));
@@ -242,10 +317,84 @@ if (contactForm) {
   const cityField = document.querySelector("#city");
   const propertiesField = document.querySelector("#properties");
   const messageField = document.querySelector("#message");
+  const submitButton = contactForm.querySelector("button[type='submit']");
+  const emailConfig = window.CLE_DOR_EMAIL_CONFIG || {};
 
   const mapPropertyToCount = (property) => {
     if (property === "Portfolio") return "2 a 3 logements";
     return "1 logement";
+  };
+
+  const setStatus = (message, type) => {
+    if (!status) return;
+    status.textContent = message;
+    status.className = `form-status ${type}`;
+  };
+
+  const sendLeadEmail = async (payload) => {
+    const provider = String(emailConfig.provider || "none").toLowerCase();
+
+    if (provider === "none") {
+      return { configured: false, delivered: false };
+    }
+
+    if (provider === "formspree") {
+      const endpoint = String(emailConfig.endpoint || "").trim();
+      if (!endpoint) {
+        throw new Error("Configuration Formspree incomplete.");
+      }
+
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Accept": "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!response.ok) {
+        throw new Error("Echec d'envoi vers Formspree.");
+      }
+
+      return { configured: true, delivered: true };
+    }
+
+    if (provider === "web3forms") {
+      const accessKey = String(emailConfig.accessKey || "").trim();
+      if (!accessKey) {
+        throw new Error("Configuration Web3Forms incomplete.");
+      }
+
+      const formPayload = {
+        access_key: accessKey,
+        subject: emailConfig.subject || "Nouvelle demande depuis Cle d'Or Conciergerie",
+        from_name: payload.fullName,
+        email: payload.email,
+        phone: payload.phone,
+        city: payload.city,
+        properties: payload.properties,
+        message: payload.message
+      };
+
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(formPayload)
+      });
+
+      const json = await response.json();
+      if (!response.ok || json.success !== true) {
+        throw new Error("Echec d'envoi vers Web3Forms.");
+      }
+
+      return { configured: true, delivered: true };
+    }
+
+    throw new Error("Provider email non supporte.");
   };
 
   const preloadJourney = () => {
@@ -277,8 +426,7 @@ if (contactForm) {
         messageField.value = autoMessage;
       }
       if (status) {
-        status.textContent = "Parcours detecte: vos informations ont ete pre-remplies.";
-        status.className = "form-status info";
+        setStatus("Parcours detecte: vos informations ont ete pre-remplies.", "info");
       }
     } catch (_error) {
       // Ignore invalid local storage payload.
@@ -287,25 +435,46 @@ if (contactForm) {
 
   preloadJourney();
 
-  contactForm.addEventListener("submit", (event) => {
+  contactForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     const formData = new FormData(contactForm);
     const requiredFields = ["fullName", "email", "phone", "city", "properties", "message"];
     const isMissing = requiredFields.some((field) => !String(formData.get(field) || "").trim());
 
     if (isMissing) {
-      if (status) {
-        status.textContent = "Merci de remplir tous les champs obligatoires.";
-        status.className = "form-status error";
-      }
+      setStatus("Merci de remplir tous les champs obligatoires.", "error");
       return;
     }
 
-    if (status) {
-      status.textContent = "Merci, votre demande a bien ete envoyee. Nous revenons vers vous sous 24h.";
-      status.className = "form-status success";
+    const payload = {
+      fullName: String(formData.get("fullName") || "").trim(),
+      email: String(formData.get("email") || "").trim(),
+      phone: String(formData.get("phone") || "").trim(),
+      city: String(formData.get("city") || "").trim(),
+      properties: String(formData.get("properties") || "").trim(),
+      message: String(formData.get("message") || "").trim()
+    };
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Envoi en cours...";
     }
 
-    contactForm.reset();
+    try {
+      const result = await sendLeadEmail(payload);
+      if (result.configured && result.delivered) {
+        setStatus("Parfait, votre demande a bien ete envoyee par email. Nous revenons vers vous sous 24h.", "success");
+      } else {
+        setStatus("Mode demo actif: configurez l'envoi email dans assets/js/email-config.js pour recevoir les demandes.", "info");
+      }
+      contactForm.reset();
+    } catch (_error) {
+      setStatus("Une erreur est survenue pendant l'envoi. Verifiez la configuration email.", "error");
+    } finally {
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = "Recevoir mon estimation";
+      }
+    }
   });
 }
